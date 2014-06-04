@@ -1,5 +1,14 @@
+/**
+ * Module dependencies
+ */
+
 var Emitter = require('emitter');
-var each = require('each');
+
+/**
+ * Expose Cycle
+ */
+
+module.exports = Cycle;
 
 /**
  * Cycle Constructor
@@ -17,9 +26,13 @@ function Cycle(nodes, neighbours, options){
   this.showing = {};
 }
 
-module.exports = Cycle;
-
 Emitter(Cycle.prototype);
+
+/**
+ * Show particular index and emit changes
+ * @param  {Number} i index
+ * @return {Cycle}   
+ */
 
 Cycle.prototype.show = function(i){
 
@@ -30,9 +43,9 @@ Cycle.prototype.show = function(i){
   // with our old range, removing those that are no
   // longer present. Note that this really isn't very
   // efficient, but should be fine for smaller data sets.
-  var self = this;
+
   if (this.unload) {
-    each(this.showing, function(key, node){
+    this.showing.forEach(function(key, node){
       var contained = false;
       key = parseInt(key);
       for (var i = indexes.start; i <= indexes.end; i++) {
@@ -42,20 +55,20 @@ Cycle.prototype.show = function(i){
         }
       }
       if (!contained) {
-        self.emit('exit', key, self.nodes[key]);
-        delete self.showing[key];
+        this.emit('exit', key, this.nodes[key]);
+        delete this.showing[key];
       }
-    });
+    }, this);
   }
 
   // Determine those newly entered.
   for (var i = indexes.start; i <= indexes.end; i++) {
-    if (!this.showing[i]) {
-      this.emit('enter', i, this.nodes[i]);
-    }
+    if (!this.showing[i]) this.emit('enter', i, this.nodes[i]);
     this.showing[i] = true;
   }
-}
+
+  return this;
+};
 
 // throw error if i is less than our start, or
 // greater than our length?
@@ -68,6 +81,6 @@ Cycle.prototype.getIndexes = function(i){
 
   this.range = { start : start, end : end };
   return this.range;
-}
+};
 
 
