@@ -3,6 +3,7 @@
  */
 
 var Emitter = require('emitter');
+var each = require('each');
 
 /**
  * Expose Cycle
@@ -45,7 +46,7 @@ Cycle.prototype.show = function(i){
   // efficient, but should be fine for smaller data sets.
 
   if (this.unload) {
-    this.showing.forEach(function(key, node){
+    each(this.showing, function(key, node){
       var contained = false;
       key = parseInt(key);
       for (var i = indexes.start; i <= indexes.end; i++) {
@@ -58,7 +59,7 @@ Cycle.prototype.show = function(i){
         this.emit('exit', key, this.nodes[key]);
         delete this.showing[key];
       }
-    }, this);
+    }.bind(this), this);
   }
 
   // Determine those newly entered.

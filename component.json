@@ -2,10 +2,11 @@
   "name": "cycle",
   "repo": "bmcmahen/cycle",
   "description": "cycle through an array to select only a particular index and a specified number of neighbours",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "keywords": [],
   "dependencies": {
-    "component/emitter": "*"  
+    "component/emitter": "*",
+    "component/each": "*"
   },
   "development": {},
   "license": "MIT",
